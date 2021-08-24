@@ -1,8 +1,8 @@
-package com.inditex.productService.validator;
+package com.inditex.product.validator;
 
 import java.util.List;
 
-import com.inditex.productService.model.dto.ProductValidationError;
+import com.inditex.product.model.dto.ProductValidationError;
 
 public interface IProductRequestValidator {
 

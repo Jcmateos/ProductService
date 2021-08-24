@@ -1,12 +1,12 @@
-package com.inditex.productService.validator;
+package com.inditex.product.validator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.inditex.productService.model.dto.ProductValidationError;
-import com.inditex.productService.model.dto.ProductValidationError.ErrorCode;
+import com.inditex.product.model.dto.ProductValidationError;
+import com.inditex.product.model.dto.ProductValidationError.ErrorCode;
 
 @Service
 public class ProductRequestValidator implements IProductRequestValidator {

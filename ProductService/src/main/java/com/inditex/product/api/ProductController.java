@@ -1,4 +1,4 @@
-package com.inditex.productService.api;
+package com.inditex.product.api;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.inditex.productService.exception.ProductServiceException;
-import com.inditex.productService.mapper.IProductMapper;
-import com.inditex.productService.model.Product;
-import com.inditex.productService.model.dto.ProductResponse;
-import com.inditex.productService.model.dto.ProductValidationError;
-import com.inditex.productService.service.IProductService;
-import com.inditex.productService.validator.IProductRequestValidator;
+import com.inditex.product.exception.ProductServiceException;
+import com.inditex.product.mapper.IProductMapper;
+import com.inditex.product.model.Product;
+import com.inditex.product.model.dto.ProductResponse;
+import com.inditex.product.model.dto.ProductValidationError;
+import com.inditex.product.service.IProductService;
+import com.inditex.product.validator.IProductRequestValidator;
 
 
 @RestController

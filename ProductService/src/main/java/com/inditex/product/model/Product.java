@@ -1,4 +1,4 @@
-package com.inditex.productService.model;
+package com.inditex.product.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

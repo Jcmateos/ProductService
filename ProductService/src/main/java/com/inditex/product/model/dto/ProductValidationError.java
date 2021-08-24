@@ -1,4 +1,4 @@
-package com.inditex.productService.model.dto;
+package com.inditex.product.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

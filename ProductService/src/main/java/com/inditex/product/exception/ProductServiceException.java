@@ -1,4 +1,4 @@
-package com.inditex.productService.exception;
+package com.inditex.product.exception;
 
 public class ProductServiceException extends Exception {
 

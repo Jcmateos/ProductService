@@ -1,56 +1,48 @@
-# Wallet Service
+# ProductService
 
-This exercise consists of building a proof of concept of a wallet service.
+En la base de datos de comercio electrónico de la compañía disponemos de la tabla PRICES que refleja el precio final (pvp) y la tarifa que aplica a un
+producto de una cadena entre unas fechas determinadas. A continuación se muestra un ejemplo de la tabla con los campos relevantes:
 
-A wallet should work as a real purse:
-- It stores a balance in euros. The owner can use this amount to pay for other services.
-- The owner can recharge it (top-up) using a third-party payments platform (stripe, paypal, redsys, ...).
-- There is no possibility to refund this money to the original payment method.
+## PRICES
+-------
 
-The basic structure of a wallet is its identifier and its current balance. If you think you need more fields,  just add them. We will discuss it in the interview. There are no wrong answers, we just want a starting point for a conversation.
+| BRAND_ID | START_DATE          | END_DATE            | PRICE_LIST | PRODUCT_ID | PRIORITY | PRICE | CURR |
+|----------|---------------------|---------------------|------------|------------|----------|-------|------|
+| 1        | 2020-06-14-00.00.00 | 2020-12-31-23.59.59 | 1          | 35455      | 0        | 35.50 | EUR  |
+| 1        | 2020-06-14-15.00.00 | 2020-06-14-18.30.00 | 2          | 35455      | 1        | 25.45 | EUR  |
+| 1        | 2020-06-15-00.00.00 | 2020-06-15-11.00.00 | 3          | 35455      | 1        | 30.50 | EUR  |
+| 1        | 2020-06-15-16.00.00 | 2020-12-31-23.59.59 | 4          | 35455      | 1        | 38.95 | EUR  |
 
-For this exercise, you have to build endpoints for:
-- Query a wallet by its identifier.
-- Subtract an amount from the wallet (that is, make a charge).
-- Recharge this wallet using a third-party platform.
+### Campos:
 
-So you can focus on these problems, you have here a maven project with a Spring Boot application. It already contains
-the basic dependencies and an H2 database. There are develop and test profiles.
+	BRAND_ID:   Foreign key de la cadena del grupo (1 = ZARA).
+	START_DATE, END_DATE: rango de fechas en el que aplica el precio tarifa indicado.
+	PRICE_LIST: Identificador de la tarifa de precios aplicable.
+	PRODUCT_ID: Identificador código de producto.
+	PRIORITY:   Desambiguador de aplicación de precios. Si dos tarifas coinciden en un rago de fechas se aplica la de mayor prioridad (mayor valor numérico).
+	PRICE:      Precio final de venta.
+	CURR:       Iso de la moneda.
 
-You can also find an implementation of the service that would call to the actual payments platform (ThirdPartyPaymentService).
-You don't have to code that, just assume that this service is doing a remote request to a third-party system. 
-This dummy implementation returns errors under certain conditions.
+#### Se pide:
 
-Take into account that this service would be working in a microservices environment and you would take care of high concurrency.
+Construir una aplicación/servicio en SpringBoot que provea una end point rest de consulta tal que:
 
-You can spend as much time as you need. We think you should not invest more than 3-4.
-You don't have to document your code, but you can write down anything you want to explain or anything you have skipped.
+Acepte como parámetros de entrada: fecha de aplicación, identificador de producto, identificador de cadena.
+Devuelva como datos de salida: identificador de producto, identificador de cadena, tarifa a aplicar, fechas de aplicación y precio final a aplicar.
 
+Se debe utilizar una base de datos en memoria (tipo h2) e inicializar con los datos del ejemplo, (se pueden cambiar el nombre de los campos y añadir
+otros nuevos si se quiere, elegir el tipo de dato que se considere adecuado para los mismos).
 
-# Servicio de bono monedero
+Desarrollar unos test al endpoint rest que validen las siguientes peticiones al servicio con los datos del ejemplo:
 
-El ejercicio consiste en construir una prueba de concepto de un servicio de bono monedero.
-El bono monedero funciona como un monedero "real":
-- Almacena un saldo en euros, que el usuario puede utilizar para pagar otros servicios.
-- El usuario puede recargar dinero desde una pasarela de pagos de terceros (stripe, paypal, redsys...).
-- No existe la posibilidad de devolver ese dinero al medio de pago original.
+- Test 1: petición a las 10:00 del día 14 del producto 35455 para la brand 1 (ZARA)
+- Test 2: petición a las 16:00 del día 14 del producto 35455 para la brand 1 (ZARA)
+- Test 3: petición a las 21:00 del día 14 del producto 35455 para la brand 1 (ZARA)
+- Test 4: petición a las 10:00 del día 15 del producto 35455 para la brand 1 (ZARA)
+- Test 5: petición a las 21:00 del día 16 del producto 35455 para la brand 1 (ZARA)
 
-La estructura básica del monedero es su identificador y su saldo actual. Si consideras que necesitas más campos,
-añádelos sin problemas y lo discutiremos en la entrevista.
+##### Se valorará:
 
-El ejercicio consiste en que programes endpoints para:
-- Consultar un bono por su identificador.
-- Descontar saldo del monedero (un cobro).
-- Recargar dinero en ese bono a través de un servicio de pago de terceros.
-
-Para que puedas ir al grano, te damos un proyecto maven con una aplicación Spring Boot, con las dependencias básicas y una
-base de datos H2. Tienes perfiles de develop y test.
-
-Tienes también una implementación del servicio que implementaría la pasarela de pago real (ThirdPartyPaymentService).
-Esa parte no tienes que programarla, asume que el servicio hace la llamada remota dada una cantidad de dinero.
-Está pensado para que devuelva error bajo ciertas condiciones.
-
-Ten en cuenta que es un servicio que conviviría en un entorno de microservicios y alta concurrencia.
-
-Le puedes dedicar el tiempo que quieras, pero hemos estimado que 3-4 horas es suficiente para demostrar  [los requisitos del puesto.](OFERTA.md#requisitos)
- No hace falta que lo documentes pero puedes anotar todo lo que quieras como explicación o justificación de lo que hagas o dejes sin hacer.
+	- Diseño y construcción del servicio.
+	- Calidad de Código.
+	- Resultados correctos en los test.

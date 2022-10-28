@@ -1,13 +1,12 @@
 package com.inditex.product.service;
 
+import com.inditex.product.exception.ProductServiceException;
+import com.inditex.product.model.Product;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import com.inditex.product.exception.ProductServiceException;
-import com.inditex.product.model.Product;
-
 public interface IProductService {
 
-	public Optional<Product> findProductToApply(Integer brandId, LocalDateTime date, Long productId) throws ProductServiceException;
-		
+  Optional<Product> findProductToApply(final Integer brandId, final LocalDateTime date, final Long productId) throws ProductServiceException;
+
 }

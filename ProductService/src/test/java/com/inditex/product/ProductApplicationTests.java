@@ -8,8 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles(profiles = "test")
 class ProductServiceApplicationTests {
 
-    @Test
-	public void emptyTest() {
-	}
+  @Test
+  void emptyTest() { }
 
 }

@@ -1,16 +1,15 @@
 package com.inditex.product.exception;
 
-public class ProductServiceException extends Exception {
+import lombok.Getter;
 
-	private static final long serialVersionUID = 8908380555199456980L;
+public class ProductServiceException extends RuntimeException {
 
-	public ProductServiceException() {}
-	
-	public ProductServiceException(String message) {
-		super(message);
-	}
-	
-	public ProductServiceException(String message, Exception ex) {
-		super(message, ex);
-	}
+  @Getter
+  private final ProductExceptionType type;
+
+  protected ProductServiceException(final String message, final ProductExceptionType type) {
+    super(message);
+    this.type = type;
+  }
+
 }

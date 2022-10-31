@@ -19,12 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional
 @AllArgsConstructor
 public class ProductServiceImpl implements IProductService {
 
   private IProductRepository productRepository;
 
+  @Transactional(readOnly = true)
   public Optional<Product> findProductToApply(final Integer brandId, final LocalDateTime date, final Long productId) throws ProductServiceException {
     try {
       List<Product> listProducts = productRepository.findAll();

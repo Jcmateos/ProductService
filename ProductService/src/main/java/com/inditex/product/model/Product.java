@@ -24,7 +24,7 @@ import org.springframework.data.annotation.Version;
 @Entity
 public class Product implements Serializable {
 
-  private static final long serialVersionUID = 3924422419041778871L;
+  private static final long serialVersionUID = 1L;
 
   @Id
   @Setter(AccessLevel.NONE)

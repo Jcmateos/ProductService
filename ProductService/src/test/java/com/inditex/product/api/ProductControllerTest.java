@@ -1,7 +1,6 @@
 package com.inditex.product.api;
 
-import static com.inditex.product.utils.DbUtils.FORMATTER;
-import static com.inditex.product.utils.DbUtils.getProducts;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
@@ -16,9 +15,9 @@ import com.inditex.product.service.IProductService;
 import com.inditex.product.validator.IProductRequestValidator;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -29,10 +28,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.jdbc.Sql;
 
+@Sql({"/data.sql"})
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
 class ProductControllerTest {
+
+  public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
   @InjectMocks
   private ProductController productController;
@@ -45,11 +48,6 @@ class ProductControllerTest {
 
   @Autowired
   private IProductRepository productRepository;
-
-  @BeforeEach
-  public void saveProducts() {
-    productRepository.saveAll(getProducts());
-  }
 
   @ParameterizedTest
   @CsvSource({
@@ -73,9 +71,13 @@ class ProductControllerTest {
     ResponseEntity<?> response = productController.getProductToApply(brandId, date, productId);
 
     // Then:
-    assertNotNull(response);
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(new BigDecimal(prize), ((ProductResponse) response.getBody()).getPrice());
+    assertAll("response",
+        () -> assertNotNull(response),
+        () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
+        () -> assertEquals(new BigDecimal(prize), ((ProductResponse) response.getBody()).getPrice()),
+        () -> assertEquals(brandId, ((ProductResponse) response.getBody()).getBrandId()),
+        () -> assertEquals(productId, ((ProductResponse) response.getBody()).getProductId())
+    );
     verify(productService, times(1)).findProductToApply(brandId, LocalDateTime.parse(date, FORMATTER), productId);
     verify(productRequestValidator, times(1)).IsValidIdRequest(brandId, date, productId);
   }

@@ -1,7 +1,6 @@
 package com.inditex.product.service.impl;
 
-import static com.inditex.product.utils.DbUtils.FORMATTER;
-import static com.inditex.product.utils.DbUtils.getProducts;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
@@ -13,9 +12,9 @@ import com.inditex.product.model.Product;
 import com.inditex.product.repository.IProductRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -24,10 +23,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 
+@Sql({"/data.sql"})
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
+
+  public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
   @InjectMocks
   private ProductServiceImpl productService;
@@ -37,11 +40,6 @@ class ProductServiceTest {
 
   @Autowired
   private IProductRepository productRepository;
-
-  @BeforeEach
-  public void saveProducts() {
-    productRepository.saveAll(getProducts());
-  }
 
   @ParameterizedTest
   @CsvSource({
@@ -64,8 +62,12 @@ class ProductServiceTest {
     Optional<Product> response = productService.findProductToApply(brandId, localDateTime, productId);
 
     // Then:
-    assertNotNull(response);
-    assertEquals(new BigDecimal(prize), response.get().getPrice());
+    assertAll("response",
+        () -> assertNotNull(response),
+        () -> assertEquals(new BigDecimal(prize), response.get().getPrice()),
+        () -> assertEquals(brandId, response.get().getBrandId()),
+        () -> assertEquals(productId, response.get().getProductId())
+    );
     verify(productRepositoryMock, times(1)).findAll();
   }
 

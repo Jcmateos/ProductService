@@ -48,7 +48,7 @@ public class ProductController {
       } else {
         ProductResponse response = IProductMapper.INSTANCE.toProductResponseDto(product.get());
 
-        log.info("The product to apply with id {} has been found.", productId);
+        log.info("The product to apply with id {} has been found and the price to apply is {}", productId, response.getPrice());
         return new ResponseEntity<>(response, HttpStatus.OK);
       }
     } catch (Exception e) {
